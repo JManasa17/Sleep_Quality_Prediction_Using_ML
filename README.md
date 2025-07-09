@@ -73,8 +73,7 @@ Sleep Start | Sleep End | Caffeine | Stress | Steps  | Mood  | Temp
 
 Example Output
 --------------
-
-Prediction: 8.3
-Category: Good
+Prediction: 8.3 , 
+Category: Good , 
 Suggestion: Great job! Keep up the healthy habits.
 
