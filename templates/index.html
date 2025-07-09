@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Quality Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #eef2f3, #8e9eab);
+            margin: 0;
+            padding: 0;
+            color: #333; }
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            animation: fadeIn 1s ease-in-out;}
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px; }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 15px 0 5px;
+            color: #555;}
+        input[type="text"], 
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f9f9f9;
+            box-sizing: border-box;
+            transition: border 0.3s ease, background-color 0.3s ease;}
+        input:focus {
+            border-color: #4CAF50;
+            background-color: #ffffff;
+            outline: none; }
+        button {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: #4CAF50;
+            color: #fff;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;}
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.02);}
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            text-align: center;
+            display: none; /* Hidden by default */}
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);}
+            to {
+                opacity: 1;
+                transform: translateY(0);}}
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;}
+            input[type="text"], 
+            input[type="number"], 
+            button {
+                font-size: 0.9rem;}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Predict Your Sleep Quality</h1>
+        <form id="prediction-form">
+            <label for="sleep_start">Sleep Start Time (HH:MM):</label>
+            <input type="text" id="sleep_start" name="sleep_start" required placeholder="e.g., 22:30">
+            <label for="sleep_end">Sleep End Time (HH:MM):</label>
+            <input type="text" id="sleep_end" name="sleep_end" required placeholder="e.g., 06:30">
+            <label for="caffeine_intake">Caffeine Intake (cups):</label>
+            <input type="number" id="caffeine_intake" name="caffeine_intake" required min="0">
+            <label for="stress_level">Stress Level (1-10):</label>
+            <input type="number" id="stress_level" name="stress_level" required min="1" max="10">
+            <label for="physical_activity">Physical Activity (steps):</label>
+            <input type="number" id="physical_activity" name="physical_activity" required min="0">
+            <label for="mood">Mood (1-10):</label>
+            <input type="number" id="mood" name="mood" required min="1" max="10">
+            <label for="environmental_factors">Environmental Factors (Temp°C):</label>
+            <input type="number" id="environmental_factors" name="environmental_factors" required min="-50" max="50">
+            <button type="submit">Submit</button>
+        </form>
+        <div class="result" id="prediction-result" style="display: none;">
+            <!-- Prediction result will be displayed here -->
+        </div>
+    </div>
+    <script>
+        document.querySelector("form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let formData = new FormData(this);
+            let data = {};
+            formData.forEach((value, key) => { data[key] = value; });
+            fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById("prediction-result");
+                resultDiv.style.display = "block";
+                if (data.prediction !== undefined) {
+                    resultDiv.innerHTML = `
+                        <p><strong>Prediction:</strong> ${data.prediction}</p>
+                        <p><strong>Category:</strong> ${data.category}</p>
+                        <p><strong>Suggestion:</strong> ${data.suggestion}</p>
+                    `;
+                } else {
+                    resultDiv.innerText = `Error: ${data.error}`;}})
+            .catch(error => {
+                const resultDiv = document.getElementById("prediction-result");
+                resultDiv.style.display = "block";
+                resultDiv.innerText = 'Error occurred. Please try again.';}); });
+    </script>
+</body>
+</html>
