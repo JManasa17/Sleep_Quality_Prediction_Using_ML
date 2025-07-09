@@ -43,17 +43,17 @@ Deployment    | Localhost / Cloud-ready
 
 Project Structure
 -----------------
-
+<pre>
 sleep-quality-prediction/
-├── app.py                 # Flask backend for prediction
-├── training.py            # Model training script
-├── best_rf_model.pkl      # Trained ML model (generated)
-├── scaler.pkl             # Feature scaler (generated)
-├── sleep_quality_data.csv # Dataset
+├── app.py                  # Flask backend for prediction
+├── training.py             # Model training script
+├── best_rf_model.pkl       # Trained ML model (generated)
+├── scaler.pkl              # Feature scaler (generated)
+├── sleep_quality_data.csv  # Dataset
 ├── templates/
-│   └── index.html         # Web interface
-└── README.txt             # Project description
-
+│ └── index.html            # Web interface
+└── README.md               # Project description
+</pre>
 
 Features
 --------
